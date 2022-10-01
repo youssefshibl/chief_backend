@@ -1,0 +1,30 @@
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    menu(id: ID @eq): Menu @find
+
+    "List multiple users."
+    menuspaginate: [Menu!]! @paginate
+
+    "all users"
+    menus: [Menu!]! @all
+}
+
+
+type Menu {
+    id: ID!
+    name: String!
+    description: String
+    image: String
+    price: String!
+    time_take: String
+    starts: ID!
+    category_id:ID!
+    category:Category
+}
+
+type Category{
+    id: ID!
+    name: String!
+}
+

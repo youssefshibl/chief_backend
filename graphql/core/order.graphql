@@ -1,0 +1,19 @@
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    orders: [Order!]! @all
+}
+
+type Mutation {
+    CreateOrder(input: makeorder! @spread): Order @create
+}
+input makeorder {
+    user_id: ID!
+    menu_id: ID!
+    payment_method: String!
+}
+
+type Order {
+    id: ID!
+    user_id: ID!
+    menu_id: ID!
+}

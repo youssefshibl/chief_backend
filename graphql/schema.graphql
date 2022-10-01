@@ -1,0 +1,141 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+scalar Default @scalar(class: "App\\GraphQL\\Scalars\\Testscalar")
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    # user(
+    #     "Search by primary key."
+    #     id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+
+    #     "Search by email address."
+    #     email: String
+    #         @eq
+    #         @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    # ): User @find
+    # userspaginate(
+    #     "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+    #     name: String @where(operator: "like")
+    # ): [User!]! @paginate
+    # users: [User!]! @all
+    me: User @auth
+    "-----------------------"
+    menu(id: ID @eq, name: String @eq): Menu @find
+    menuspaginate: [Menu!]! @paginate
+    menus: [Menu!]! @all
+    "-----------------------"
+    orders: [Order!]! @all
+    myorders: [Order] @guard(with: "api")
+    "----------------------"
+    categoryies: [Category] @all
+    "ordercollections"
+    ordercollection: [Ordercollection] @guard(with: "api")
+}
+
+type Mutation {
+    CreateUser(name: String!, email: String!, password: String!): User! @create
+    "----------------"
+    CreateOrder(input: makeorder! @spread): Order @guard(with: "api")
+
+    DeletOrder(input: deletorder! @spread): Order @guard(with: "api")
+    "----------------"
+    DeletAddress(address_id: ID!): User @guard(with: "api")
+    AddAddress(input: addaddress! @spread): User @guard(with: "api")
+    EditAddress(id: ID!, input: addaddress! @spread): User @guard(with: "api")
+    MakeOrdercollection(input: ordercollection! @spread): Default
+        @guard(with: "api")
+}
+
+"Account of a person who utilizes this application."
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    address: String
+    phone: String
+    email_verified_at: DateTime
+    created_at: DateTime!
+    updated_at: DateTime!
+    orders: [Order] @hasMany
+    address: [Address] @hasMany
+}
+
+type Order {
+    id: ID!
+    payment_method: String!
+    number: ID!
+    menu: Menu @belongsTo
+    user: User @belongsTo
+}
+
+type Address {
+    id: ID!
+    country: String!
+    phone: String!
+    adress: String!
+    Postal_Code: String!
+    state: String!
+}
+type Menu {
+    id: ID!
+    name: String!
+    description: String
+    image: String
+    price: String!
+    time_take: String
+    starts: ID!
+    category_id: ID!
+    category: Category @belongsTo
+    orders: [Order] @hasMany
+}
+type Category {
+    id: ID!
+    name: String!
+    menu: [Menu] @hasMany
+}
+type Ordercollection {
+    id: ID!
+    user: User @belongsTo
+    makeed: ID
+    started: ID
+    in_way: ID
+    finished: ID
+    canceled: ID
+    completed: ID
+    address: String
+    payment_method: String
+    payment_id: ID
+    orders: [Order] @belongsToMany
+    payment: Payment @belongsTo
+}
+"-------------order---------"
+input makeorder {
+    menu_id: ID!
+    number: ID!
+}
+input deletorder {
+    menu_id: ID!
+}
+
+input addaddress {
+    country: String!
+    phone: String!
+    adress: String!
+    state: String!
+    Postal_Code: String!
+}
+input ordercollection {
+    address_id: ID!
+    payment_method: String!
+    Payment_data: String
+}
+type Payment {
+    id: ID!
+    payment_method: String!
+    value: Default!
+    status: ID!
+}

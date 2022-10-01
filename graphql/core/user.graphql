@@ -1,0 +1,56 @@
+
+"Indicates what fields are available at the top level of a query operation."
+ type Query  {
+    user(
+        "Search by primary key."
+        id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+
+        "Search by email address."
+        email: String
+            @eq
+            @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    ): User @find
+
+    "List multiple users."
+    userspaginate(
+        "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+        name: String @where(operator: "like")
+    ): [User!]! @paginate
+
+    "all users"
+    users: [User!]! @all
+}
+
+type Mutation {
+    CreateUser(name: String!, email: String!, password: String!): User! @create
+}
+
+"Account of a person who utilizes this application."
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    address: String
+    phone: String
+    email_verified_at: DateTime
+    created_at: DateTime!
+    updated_at: DateTime!
+    orders: [Order]
+}
+
+type Order {
+    id: ID!
+    payment_method: String!
+    menu: Menu
+}
+
+type Menu {
+    id: ID!
+    name: String!
+    description: String
+    image: String
+    price: String!
+    time_take: String
+    starts: ID!
+    category_id: ID!
+}
