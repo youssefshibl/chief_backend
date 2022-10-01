@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\NotificationStatus;
 use App\Http\Controllers\Auth\SocialAuthLogin;
 use App\Http\Controllers\Mail\MailActions;
 use App\Models\User;
@@ -26,8 +27,9 @@ Route::get('/verfie_emai/{id}', [MailActions::class, 'verify_email'])->name('ver
 Route::get('/auth/{serv}/redirect', [SocialAuthLogin::class, 'redirect'])->name('social.redirect');
 Route::get('/auth/{serv}/callback', [SocialAuthLogin::class, 'callback'])->name('social.callback');
 
-Route::get('test', function () {
-    return view('one');
+Route::get('test/{id}', function ($id) {
+    $user = User::find($id);
+    broadcast(new NotificationStatus($user));
 });
 
 
@@ -41,13 +43,3 @@ Route::post('get', function (Request $request) {
         return 'no';
     }
 })->name('one');
-
-Route::get('one' , function(){
-    $one = ['one' ,'tow'];
-    return json_encode($one);
-});
-
-Route::get('two' , function(){
-    $one = ['one' ,'tow'];
-    return $one;
-});

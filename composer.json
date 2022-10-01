@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "beyondcode/laravel-websockets": "^1.13",
         "doctrine/dbal": "^3.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -16,6 +17,8 @@
         "laravel/tinker": "^2.5",
         "mll-lab/laravel-graphiql": "^1.0",
         "nuwave/lighthouse": "^5.60",
+        "predis/predis": "^2.0",
+        "pusher/pusher-php-server": "~3.0",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
