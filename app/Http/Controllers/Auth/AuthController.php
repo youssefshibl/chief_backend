@@ -47,7 +47,11 @@ class AuthController extends Controller
         $user     = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
         $token = Auth::guard('api')->login($user);
         MailSystem::SendVerifie($user);
-        return $this->send_data('token', $token);
+        $handledata = (new UserResource($user));
+        return $this->send_data('data', [
+            'token' => $token,
+            'user' => $handledata
+        ]);
     }
 
     /**

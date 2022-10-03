@@ -17,8 +17,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('order_status_id_1', function ($user) {
+Broadcast::channel('order_status_id_{id}', function ($user, $id) {
     return true;
 });
-
-

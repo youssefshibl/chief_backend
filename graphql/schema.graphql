@@ -27,6 +27,7 @@ type Query {
     menu(id: ID @eq, name: String @eq): Menu @find
     menuspaginate: [Menu!]! @paginate
     menus: [Menu!]! @all
+    menusearch(name: String @where(operator: "like")): [Menu] @all
     "-----------------------"
     orders: [Order!]! @all
     myorders: [Order] @guard(with: "api")
@@ -92,6 +93,7 @@ type Menu {
     category: Category @belongsTo
     orders: [Order] @hasMany
 }
+
 type Category {
     id: ID!
     name: String!
